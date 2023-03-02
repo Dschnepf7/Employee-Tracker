@@ -11,7 +11,7 @@ VALUES (1,'software director', 100000.00, 4),
     (3,'human resources consultant', 75000.00, 2),
     (4,'Sales Representative', 50000.00, 1);
 
-INSERT INTO employee (id, first_name, last_name, role_id, department.id)
+INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
 VALUES (1,'Dominic', 'Schnepf', 1, 4),
         (2, 'John', 'Doe', 2, 3),
         (3, 'Jane', 'Doe',3, 2),
