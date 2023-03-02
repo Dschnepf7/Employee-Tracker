@@ -18,8 +18,12 @@ const db = mysql.createConnection(
     // MySQL username,
     user: 'root',
     // MySQL password
-    password: '050497Ds!',
+    password: 'rootroot',
     database: 'database_db'
   },
   console.log(`Connected to database.`)
 );
+
+db.query('SELECT * FROM employee', function (err, results) {
+    console.log(results);
+  });
