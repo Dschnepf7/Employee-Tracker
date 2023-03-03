@@ -8,7 +8,7 @@ The employee-tracker application is desgined to host all of the information a us
 https://drive.google.com/file/d/1QkSlGoQZUIN0Bi7ctUpeiBYlsaQF6J0n/view
 
 ## Screenshot
-![Screenshot of my project](https://imgur.com/a/iOCVpZS)
+![Screenshot of my project](https://drive.google.com/file/d/1jXammo4N3miK5y3RuxsbKvo1vppsTEJw/view?usp=share_link)
 
 ## Usage
 First the user should open the terminal and run command "npm i" to install the necessary dependencies for the application.
