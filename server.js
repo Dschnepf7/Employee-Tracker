@@ -202,7 +202,7 @@ const db = mysql.createConnection(
         .then((answer) => {
           // Code to update an employee role
           db.query(
-            `UPDATE employee SET role_id = (SELECT id FROM role WHERE role.title =?) WHERE CONCAT(first_name,'', last_name) =?`,
+            `UPDATE employee SET employee.role_id = (SELECT id FROM role WHERE role.title =?) WHERE CONCAT(first_name,'', last_name) =?`,
             [answer.new_role_id, answer.employee_id],
             function (err, results) {
               if (err) throw err;
