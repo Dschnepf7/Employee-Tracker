@@ -79,9 +79,9 @@ const db = mysql.createConnection(
       message: 'Enter the employee\'s last name:',
     },
     {
-      type: 'input',
+      type: 'number',
       name: 'role_id',
-      message: 'Enter the role for the employee:',
+      message: 'Enter the role ID for the employee:',
     },
     {
       type: 'input',
@@ -93,24 +93,25 @@ const db = mysql.createConnection(
   // Define the inquirer questions for updating an employee's role
   const query = 'SELECT CONCAT(first_name, " ", last_name) AS name FROM employee';
   
-  db.query(query, (error, results) => {
-    if (error) throw error;
-    const employeeNames = results.map(result => result.name);
+  // db.query(query, (error, results) => {
+  //   if (error) throw error;
+  //   const employeeNames = results.map(result => result.name);
     
+ 
     const updateEmployeeRoleQuestions =[
     {
-      type: 'list',
+      type: 'input',
       name: 'employeeName',
       message: 'Select the employee to update:',
-      choices: employeeNames,
+      // choices: employeeNames,
     },
     {
-      type: 'number',
+      type: 'input',
       name: 'new_role_id',
-      message: 'Enter the new role ID for the employee:',
+      message: 'Enter the new role for the employee:',
     },
   ] 
-});
+// });
 
 
   inquirer.prompt({
@@ -174,24 +175,25 @@ const db = mysql.createConnection(
         break;
 
         case 'Add an employee':
-          // Prompt the user for the employee information and add it to the database
-          inquirer.prompt(addEmployeeQuestions)
-  .then((answer) => {
-    // Code to add an employee
-    db.query(
-      `INSERT INTO employee (first_name, last_name, role_id, manager_id)
-       SELECT ?, ?, (SELECT id FROM role WHERE title = ?), (SELECT id FROM employee WHERE CONCAT(first_name, ' ', last_name) = ?)`,
-      [answer.first_name, answer.last_name, answer.role, answer.manager],
-      function (err, results) {
+  // Prompt the user for the employee information and add it to the database
+  inquirer.prompt(addEmployeeQuestions)
+    .then((answer) => {
+      // Query the database to get the id of the manager
+      db.query(`SELECT id FROM employee WHERE CONCAT(first_name, ' ', last_name) = ?`, answer.manager_name, function(err, managerResult) {
         if (err) throw err;
-        console.log(`${answer.first_name} ${answer.last_name} has been added to employees.`);
-        console.table(results);
-      }
-    );
-    
-  });
 
-          break;
+        const managerId = managerResult[0].id;
+        
+        // Code to add an employee
+        db.query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) 
+          SELECT?,?,?,?`, [answer.first_name, answer.last_name, answer.role_id, managerId], function (err, results) {
+          if (err) throw err;
+          console.log(`${answer.first_name} ${answer.last_name} has been added to employees.`);
+          console.table(results);
+        });
+      });
+    });
+  break;
         
 
       case 'Update an employee role':
@@ -200,7 +202,7 @@ const db = mysql.createConnection(
         .then((answer) => {
           // Code to update an employee role
           db.query(
-            `UPDATE employee SET role_id = (SELECT id FROM role WHERE title =?) WHERE CONCAT(first_name,'', last_name) =?`,
+            `UPDATE employee SET role_id = (SELECT id FROM role WHERE role.title =?) WHERE CONCAT(first_name,'', last_name) =?`,
             [answer.new_role_id, answer.employee_id],
             function (err, results) {
               if (err) throw err;
